@@ -30,4 +30,8 @@ describe('Time Zone Tracker', () => {
   it('has toolbar', () => {
     expect(fixture.nativeElement.querySelector('mat-toolbar')).toBeTruthy();
   });
+
+  it('has dropdown for timezones', () => {
+    expect(fixture.nativeElement.querySelector('mat-toolbar mat-select')).toBeTruthy();
+  });
 });
