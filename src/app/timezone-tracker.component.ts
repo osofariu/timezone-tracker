@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 
 @Component({
-  selector: 'foo',
+  selector: 'app-timezone-tracker',
   templateUrl: 'timezone-tracker.component.html'
 })
 export class TimeZoneTrackerComponent {}

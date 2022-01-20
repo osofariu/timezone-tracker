@@ -1,14 +1,14 @@
 import {ComponentFixture, TestBed, waitForAsync} from "@angular/core/testing";
 import {TimeZoneTrackerComponent} from "./timezone-tracker.component";
+import {MatToolbarModule} from "@angular/material/toolbar";
 
 describe('Time Zone Tracker', () => {
   let fixture: ComponentFixture<TimeZoneTrackerComponent>;
   let app: TimeZoneTrackerComponent;
 
-  beforeEach(waitForAsync (() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-      ],
+      imports: [MatToolbarModule],
       declarations: [
         TimeZoneTrackerComponent
       ],
@@ -18,11 +18,16 @@ describe('Time Zone Tracker', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TimeZoneTrackerComponent);
     app = fixture.componentInstance;
+
+    fixture.detectChanges();
   });
 
   it('has title', () => {
-    fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('[data-testid=app-title]')?.textContent).toContain('Time Zone Tracker');
+    expect(compiled.querySelector('mat-toolbar [data-testid=app-title]')?.textContent).toContain('Time Zone Tracker');
   });
-})
+
+  it('has toolbar', () => {
+    expect(fixture.nativeElement.querySelector('mat-toolbar')).toBeTruthy();
+  });
+});
