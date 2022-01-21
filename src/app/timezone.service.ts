@@ -1,38 +1,15 @@
 import {Injectable} from "@angular/core"
 import {HttpClient} from "@angular/common/http";
 
-import {from, Observable, of} from 'rxjs';
+import {from, Observable, of, switchMap} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class TimeZoneService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getLocations(): Observable<string[]> {
-
-    return of([
-      "Australia/Broken_Hill",
-      "Australia/Darwin",
-      "Australia/Eucla",
-      "Australia/Hobart",
-      "Australia/Lindeman",
-      "Australia/Lord_Howe",
-      "Australia/Melbourne",
-      "Australia/Perth",
-      "Australia/Sydney",
-      "CET",
-      "CST6CDT",
-      "EET",
-      "EST",
-      "EST5EDT",
-      "Etc/GMT",
-      "Etc/GMT+1",
-      "Etc/GMT+10",
-      "Etc/GMT+11",
-      "Etc/GMT+12",
-      "Etc/GMT+2",
-      "Etc/GMT+3",
-    ])
+  getLocations(): Observable<any> {
+    return this.httpClient.get('https://worldtimeapi.org/api/timezone');
   }
 }
 

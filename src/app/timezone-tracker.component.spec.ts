@@ -76,4 +76,18 @@ describe('Time Zone Tracker', () => {
 
     expect(app.selectedLocation).toEqual('CET')
   })
+
+  it('selecting a timezone should add a new entry to the list of timezones', async() => {
+    const trigger = fixture.debugElement.query(By.css('.mat-select-trigger')).nativeElement;
+    trigger.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const options = document.querySelectorAll('.mat-select-panel mat-option');
+    const secondOption = options.item(1) as HTMLElement
+    secondOption.click();
+
+    let timezoneComponent = fixture.nativeElement.querySelector('app-timezone');
+    expect(timezoneComponent).toBeTruthy();
+  })
 });
