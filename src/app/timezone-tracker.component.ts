@@ -7,13 +7,13 @@ import {TimeZoneService, TzLocation} from "./timezone.service"
   styleUrls: ['timezone-tracker.component.scss']
 })
 export class TimeZoneTrackerComponent implements OnInit{
-  locations: TzLocation[] = []
+  locations: TzLocation[] = [];
+  selectedLocation?: string;
 
   constructor(private timeZoneService: TimeZoneService) { }
 
   ngOnInit(): void {
     this.locations = this.timeZoneService.getLocations()
-    console.log('**', this.locations)
   }
 
 }
