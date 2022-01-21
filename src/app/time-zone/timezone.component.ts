@@ -1,7 +1,9 @@
-import {Component} from "@angular/core";
+import {Component, Input} from "@angular/core";
 
 @Component({
   selector: 'app-timezone',
   template: ''
 })
-export class TimeZoneComponent {}
+export class TimeZoneComponent {
+  @Input() timezone?: string;
+}

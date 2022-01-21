@@ -5,14 +5,25 @@ import {TimeZoneService} from "./timezone.service"
 import {MatOptionModule} from "@angular/material/core";
 import {MatSelectModule} from "@angular/material/select";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {DebugElement} from "@angular/core";
+import {Component, DebugElement, Input} from "@angular/core";
 import {By} from "@angular/platform-browser";
 import {of} from "rxjs";
+import {TimeZoneComponent} from "./time-zone/timezone.component";
+import {MatList, MatListModule} from "@angular/material/list";
+import {MatCardModule} from "@angular/material/card";
+
+@Component({
+  selector: 'app-timezone',
+  template: ''
+})
+class TimeZoneSpy {
+  @Input() public timezone?: string;
+}
 
 describe('Time Zone Tracker', () => {
   let fixture: ComponentFixture<TimeZoneTrackerComponent>;
   let app: TimeZoneTrackerComponent;
-  let timezoneServiceStub: Partial<TimeZoneService>
+  let timezoneServiceStub: Partial<TimeZoneService>;
 
   timezoneServiceStub = {
     getLocations: () => of(["Australia/Sydney", "CET"])
@@ -20,9 +31,17 @@ describe('Time Zone Tracker', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [MatToolbarModule, MatOptionModule, MatSelectModule, BrowserAnimationsModule],
+      imports: [
+        MatToolbarModule,
+        MatOptionModule,
+        MatSelectModule,
+        BrowserAnimationsModule,
+        MatListModule,
+        MatCardModule
+      ],
       declarations: [
-        TimeZoneTrackerComponent
+        TimeZoneTrackerComponent,
+        TimeZoneSpy
       ],
       providers: [
         {provide: TimeZoneService, useValue: timezoneServiceStub}
@@ -86,8 +105,10 @@ describe('Time Zone Tracker', () => {
     const options = document.querySelectorAll('.mat-select-panel mat-option');
     const secondOption = options.item(1) as HTMLElement
     secondOption.click();
+    fixture.detectChanges();
 
-    let timezoneComponent = fixture.nativeElement.querySelector('app-timezone');
-    expect(timezoneComponent).toBeTruthy();
+    let timezoneComponent = fixture.debugElement.query(By.css('app-timezone')).componentInstance;
+
+    expect(timezoneComponent.timezone).toBe('CET');
   })
 });
