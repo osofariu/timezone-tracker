@@ -7,6 +7,7 @@ import {MatSelectModule} from "@angular/material/select";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {DebugElement} from "@angular/core";
 import {By} from "@angular/platform-browser";
+import {of} from "rxjs";
 
 describe('Time Zone Tracker', () => {
   let fixture: ComponentFixture<TimeZoneTrackerComponent>;
@@ -14,7 +15,7 @@ describe('Time Zone Tracker', () => {
   let timezoneServiceStub: Partial<TimeZoneService>
 
   timezoneServiceStub = {
-    getLocations: () => [{area: 'America', location: 'EST'}, {area: 'Europe', location: 'London'}],
+    getLocations: () => of(["Australia/Sydney", "CET"])
   };
 
   beforeEach(waitForAsync(() => {
@@ -56,8 +57,8 @@ describe('Time Zone Tracker', () => {
       const selectOptions = fixture.debugElement.queryAll(By.css('.mat-option-text'));
 
       expect(selectOptions.length).toEqual(2)
-      expect(selectOptions[0].nativeElement.textContent).toContain('America')
-      expect(selectOptions[1].nativeElement.textContent).toContain('Europe')
+      expect(selectOptions[0].nativeElement.textContent).toContain('Australia/Sydney')
+      expect(selectOptions[1].nativeElement.textContent).toContain('CET')
     });
   })
 
@@ -73,6 +74,6 @@ describe('Time Zone Tracker', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(app.selectedLocation).toEqual('Europe')
+    expect(app.selectedLocation).toEqual('CET')
   })
 });

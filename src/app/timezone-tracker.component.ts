@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core"
-import {TimeZoneService, TzLocation} from "./timezone.service"
+import {TimeZoneService} from "./timezone.service"
 
 @Component({
   selector: 'app-timezone-tracker',
@@ -7,13 +7,14 @@ import {TimeZoneService, TzLocation} from "./timezone.service"
   styleUrls: ['timezone-tracker.component.scss']
 })
 export class TimeZoneTrackerComponent implements OnInit{
-  locations: TzLocation[] = [];
+  locations: string[] = [];
   selectedLocation?: string;
 
   constructor(private timeZoneService: TimeZoneService) { }
 
   ngOnInit(): void {
-    this.locations = this.timeZoneService.getLocations()
+    this.timeZoneService.getLocations().subscribe(locations => {
+      this.locations = locations
+    })
   }
-
 }

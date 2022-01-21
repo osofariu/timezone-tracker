@@ -6,6 +6,7 @@ import { TimeZoneTrackerComponent } from './timezone-tracker.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSelectModule} from "@angular/material/select";
 import {TimeZoneService} from "./timezone.service"
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import {TimeZoneService} from "./timezone.service"
     BrowserModule,
     MatToolbarModule,
     BrowserAnimationsModule,
-    MatSelectModule
+    MatSelectModule,
+    HttpClientModule
   ],
   providers: [TimeZoneService],
   bootstrap: [TimeZoneTrackerComponent]

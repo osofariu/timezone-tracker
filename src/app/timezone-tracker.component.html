@@ -3,8 +3,8 @@
   <span class="spacer"></span>
   <mat-form-field>
     <mat-select [(value)]="selectedLocation" name="location">
-      <mat-option *ngFor="let location of locations" [value]="location.area">
-        {{location.area}}
+      <mat-option *ngFor="let location of locations" [value]="location">
+        {{location}}
       </mat-option>
     </mat-select>
   </mat-form-field>
