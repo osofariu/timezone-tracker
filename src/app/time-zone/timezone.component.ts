@@ -3,7 +3,8 @@ import {DateTime, Settings} from 'luxon'
 
 @Component({
   selector: 'app-timezone',
-  templateUrl: './timezone.component.html'
+  templateUrl: './timezone.component.html',
+  styleUrls: ['./timezone.component.scss']
 })
 export class TimeZoneComponent implements OnInit{
   @Input() timezone?: string;

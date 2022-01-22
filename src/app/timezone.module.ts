@@ -9,7 +9,6 @@ import {MatSelectModule} from "@angular/material/select";
 import {TimeZoneService} from "./timezone.service"
 import {HttpClientModule} from "@angular/common/http";
 import {MatListModule} from "@angular/material/list";
-import {MatCardModule} from "@angular/material/card";
 
 @NgModule({
   declarations: [
@@ -23,7 +22,6 @@ import {MatCardModule} from "@angular/material/card";
     MatSelectModule,
     HttpClientModule,
     MatListModule,
-    MatCardModule
   ],
   providers: [TimeZoneService],
   bootstrap: [TimeZoneTrackerComponent]

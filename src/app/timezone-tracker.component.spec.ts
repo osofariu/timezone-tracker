@@ -37,7 +37,6 @@ describe('TimeZone Tracker', () => {
         MatSelectModule,
         BrowserAnimationsModule,
         MatListModule,
-        MatCardModule
       ],
       declarations: [
         TimeZoneTrackerComponent,
