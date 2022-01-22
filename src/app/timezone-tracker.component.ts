@@ -9,8 +9,13 @@ import {TimeZoneService} from "./timezone.service"
 export class TimeZoneTrackerComponent implements OnInit{
   timeZonesList: string[] = [];
   selectedLocation?: string;
+  selectedTimeZones: string[] = []
 
   constructor(private timeZoneService: TimeZoneService) { }
+
+  selectionChange(value: string) {
+    this.selectedTimeZones.push(value)
+  }
 
   ngOnInit(): void {
     this.timeZoneService.getLocations().subscribe(locations => {

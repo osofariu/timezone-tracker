@@ -92,6 +92,11 @@ describe('TimeZone Tracker', () => {
     expect(timezoneComponent.timezone).toBe('CET')
   })
 
+  it('if not timezone is selected, the timezone card should not be present', () => {
+    let timezoneComponent = fixture.debugElement.query(By.css('app-timezone'))?.componentInstance
+    expect(timezoneComponent).toBeFalsy()
+  })
+
   async function selectTimeZoneDropdown() {
     const trigger = fixture.debugElement.query(By.css('.mat-select-trigger')).nativeElement
     trigger.click()
