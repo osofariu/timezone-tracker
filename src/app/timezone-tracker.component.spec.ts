@@ -20,7 +20,7 @@ class TimeZoneStub {
 }
 
 
-describe('Time Zone Tracker', () => {
+describe('TimeZone Tracker', () => {
   let fixture: ComponentFixture<TimeZoneTrackerComponent>
   let app: TimeZoneTrackerComponent
   let timezoneServiceStub: Partial<TimeZoneService>
