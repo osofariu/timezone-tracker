@@ -1,7 +1,6 @@
-import {flush, TestBed} from "@angular/core/testing";
-import {TimeZoneService} from "./timezone.service";
-import { HttpClientTestingModule,
-  HttpTestingController } from '@angular/common/http/testing';
+import {TestBed} from "@angular/core/testing"
+import {TimeZoneService} from "./timezone.service"
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing'
 
 describe('Timezone service', () => {
 
