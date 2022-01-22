@@ -10,7 +10,5 @@
   </mat-form-field>
 </mat-toolbar>
 <mat-list>
-  <mat-card *ngFor="let timeZoneName of selectedTimeZones">
-    <app-timezone [timezone]="timeZoneName"></app-timezone>
-  </mat-card>
+  <app-timezone [timezone]="timeZoneName" *ngFor="let timeZoneName of selectedTimeZones"></app-timezone>
 </mat-list>
