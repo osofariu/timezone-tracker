@@ -1,18 +1,18 @@
 import {TestBed} from "@angular/core/testing"
-import {TimeZoneService} from "./timezone.service"
+import {TimezoneService} from "./timezone.service"
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing'
 
-describe('TimeZone Service', () => {
+describe('Timezone Service', () => {
 
-  let timezoneService: TimeZoneService;
+  let timezoneService: TimezoneService;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [TimeZoneService]
+      providers: [TimezoneService]
     });
-    timezoneService = TestBed.inject(TimeZoneService);
+    timezoneService = TestBed.inject(TimezoneService);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 

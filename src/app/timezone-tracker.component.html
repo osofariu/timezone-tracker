@@ -1,12 +1,12 @@
 <mat-toolbar color="primary">
   <h1 data-testid="app-title">Time Zone Tracker</h1>
   <span class="spacer"></span>
-  <timezone-selector [availableTimezones]="timeZonesList"
+  <timezone-selector [availableTimezones]="timezonesList"
                      (selectedTimezone)="onSelectedTimezone($event)">
   </timezone-selector>
 </mat-toolbar>
 <mat-list>
-  <app-timezone [timezone]="timeZoneName" *ngFor="let timeZoneName of selectedTimeZones"></app-timezone>
+  <app-timezone [timezone]="timezoneName" *ngFor="let timezoneName of selectedTimezones"></app-timezone>
 </mat-list>
 
 <div class="error-message">{{error}}</div>

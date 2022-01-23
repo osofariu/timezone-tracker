@@ -1,7 +1,7 @@
 import {ComponentFixture, TestBed, waitForAsync} from "@angular/core/testing"
-import {TimeZoneTrackerComponent} from "./timezone-tracker.component"
+import {TimezoneTrackerComponent} from "./timezone-tracker.component"
 import {MatToolbarModule} from "@angular/material/toolbar"
-import {TimeZoneService} from "./timezone.service"
+import {TimezoneService} from "./timezone-service/timezone.service"
 import {MatOptionModule} from "@angular/material/core"
 import {MatSelectModule} from "@angular/material/select"
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations"
@@ -15,13 +15,13 @@ import {TimezoneSelectorComponent} from "./timezone-selector/timezone-selector.c
   selector: 'app-timezone',
   template: ''
 })
-class TimeZoneStub {
+class TimezoneStub {
   @Input() public timezone?: string
 }
 
-describe('TimeZone Tracker', () => {
-  let fixture: ComponentFixture<TimeZoneTrackerComponent>
-  let app: TimeZoneTrackerComponent
+describe('Timezone Tracker', () => {
+  let fixture: ComponentFixture<TimezoneTrackerComponent>
+  let app: TimezoneTrackerComponent
 
   function setupTestBed(timezoneServiceStub: any) {
     TestBed.configureTestingModule({
@@ -33,12 +33,12 @@ describe('TimeZone Tracker', () => {
         MatListModule,
       ],
       declarations: [
-        TimeZoneTrackerComponent,
+        TimezoneTrackerComponent,
         TimezoneSelectorComponent,
-        TimeZoneStub
+        TimezoneStub
       ],
       providers: [
-        {provide: TimeZoneService, useValue: timezoneServiceStub}
+        {provide: TimezoneService, useValue: timezoneServiceStub}
       ]
     }).compileComponents()
   }
@@ -52,7 +52,7 @@ describe('TimeZone Tracker', () => {
     }))
 
     beforeEach(() => {
-      fixture = TestBed.createComponent(TimeZoneTrackerComponent)
+      fixture = TestBed.createComponent(TimezoneTrackerComponent)
       app = fixture.componentInstance
       fixture.detectChanges()
     })
@@ -74,15 +74,15 @@ describe('TimeZone Tracker', () => {
     })
 
     it('selecting a timezone should add a new timezone item for that timezone', async () => {
-      await selectTimeZoneDropdown()
-      await selectTimeZoneItem(1)
+      await selectTimezoneDropdown()
+      await selectTimezoneItem(1)
 
       let timezoneComponent = fixture.debugElement.query(By.css('app-timezone')).componentInstance
       expect(timezoneComponent.timezone).toBe('CET')
     })
 
-    it('uses TimeZoneService to show user a list of timezone areas', async () => {
-      await selectTimeZoneDropdown()
+    it('uses TimezoneService to show user a list of timezone areas', async () => {
+      await selectTimezoneDropdown()
       const selectOptions = fixture.debugElement.queryAll(By.css('.mat-option-text'))
 
       expect(selectOptions.length).toEqual(2)
@@ -90,14 +90,14 @@ describe('TimeZone Tracker', () => {
       expect(selectOptions[1].nativeElement.textContent).toContain('CET')
     })
 
-    async function selectTimeZoneDropdown() {
+    async function selectTimezoneDropdown() {
       const trigger = fixture.debugElement.query(By.css('.mat-select-trigger')).nativeElement
       trigger.click()
       fixture.detectChanges()
       await fixture.whenStable()
     }
 
-    async function selectTimeZoneItem(itemNumber: number) {
+    async function selectTimezoneItem(itemNumber: number) {
 
       const options = document.querySelectorAll('.mat-select-panel mat-option')
       const secondOption = options.item(itemNumber) as HTMLElement
@@ -116,7 +116,7 @@ describe('TimeZone Tracker', () => {
     }))
 
     beforeEach(() => {
-      fixture = TestBed.createComponent(TimeZoneTrackerComponent)
+      fixture = TestBed.createComponent(TimezoneTrackerComponent)
       app = fixture.componentInstance
       fixture.detectChanges()
     })
@@ -129,6 +129,4 @@ describe('TimeZone Tracker', () => {
       })
     })
   })
-
-
 })

@@ -1,12 +1,12 @@
 import {Component, Input, OnInit} from "@angular/core"
-import {DateTime, Settings} from 'luxon'
+import {DateTime} from 'luxon'
 
 @Component({
   selector: 'app-timezone',
-  templateUrl: './timezone.component.html',
-  styleUrls: ['./timezone.component.scss']
+  templateUrl: './timezone-item.component.html',
+  styleUrls: ['./timezone-item.component.scss']
 })
-export class TimeZoneComponent implements OnInit{
+export class TimezoneItemComponent implements OnInit{
   @Input() timezone?: string;
   localTime: string = ''
 

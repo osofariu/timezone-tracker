@@ -1,22 +1,22 @@
 import {Component, OnInit} from "@angular/core"
-import {TimeZoneService} from "./timezone.service"
+import {TimezoneService} from "./timezone-service/timezone.service"
 
 @Component({
   selector: 'app-timezone-tracker',
   templateUrl: 'timezone-tracker.component.html',
   styleUrls: ['timezone-tracker.component.scss']
 })
-export class TimeZoneTrackerComponent implements OnInit{
-  timeZonesList?: string[] = [];
-  selectedTimeZones: string[] = []
+export class TimezoneTrackerComponent implements OnInit{
+  timezonesList?: string[] = [];
+  selectedTimezones: string[] = []
   error?: string
 
-  constructor(private timeZoneService: TimeZoneService) { }
+  constructor(private timezoneService: TimezoneService) { }
 
   ngOnInit(): void {
-    this.timeZoneService.getLocations().subscribe(response => {
+    this.timezoneService.getLocations().subscribe(response => {
       if (response.results) {
-        this.timeZonesList = response.results
+        this.timezonesList = response.results
       } else {
         this.error = response.error || 'Unknown error'
       }
@@ -24,7 +24,6 @@ export class TimeZoneTrackerComponent implements OnInit{
   }
 
   onSelectedTimezone(timezone: string) {
-    this.selectedTimeZones?.push(timezone)
-    console.log('** ', timezone, this.selectedTimeZones)
+    this.selectedTimezones?.push(timezone)
   }
 }

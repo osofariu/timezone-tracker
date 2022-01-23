@@ -3,9 +3,8 @@ import {By} from "@angular/platform-browser"
 import {TimezoneSelectorComponent} from "./timezone-selector.component"
 import {MatSelectModule} from "@angular/material/select"
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations"
-import {TimeZoneTrackerComponent} from "../timezone-tracker.component"
 
-describe('TimeZone Selector',  () => {
+describe('Timezone Selector',  () => {
   let fixture: ComponentFixture<TimezoneSelectorComponent>
   let app: TimezoneSelectorComponent
 
@@ -17,7 +16,6 @@ describe('TimeZone Selector',  () => {
         BrowserAnimationsModule
       ]
     }).compileComponents()
-
   }))
 
   beforeEach(() => {
@@ -33,15 +31,13 @@ describe('TimeZone Selector',  () => {
   })
 
   it('when selecting a timezone from the list, component remembers the selected value', async () => {
-    await selectTimeZoneDropdown()
-    await selectTimeZoneItem(1)
+    await selectTimezoneDropdown()
+    await selectTimezoneItem(1)
 
     expect(app.selectedLocation).toEqual('Europe/Bucharest')
   })
 
-
-
-  async function selectTimeZoneDropdown() {
+  async function selectTimezoneDropdown() {
     const trigger = fixture.debugElement.query(By.css('.mat-select-trigger')).nativeElement
     trigger.click()
     fixture.detectChanges()
@@ -51,8 +47,7 @@ describe('TimeZone Selector',  () => {
     });
   }
 
-  async function selectTimeZoneItem(itemNumber: number) {
-
+  async function selectTimezoneItem(itemNumber: number) {
     const options = document.querySelectorAll('.mat-select-panel mat-option')
     const secondOption = options.item(itemNumber) as HTMLElement
     secondOption.click()

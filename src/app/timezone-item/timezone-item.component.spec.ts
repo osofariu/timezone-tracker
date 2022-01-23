@@ -1,29 +1,28 @@
 import {ComponentFixture, TestBed, waitForAsync} from "@angular/core/testing"
-import {TimeZoneComponent} from "./timezone.component"
-import {DateTime, Settings} from "luxon"
-import {MatCardModule} from "@angular/material/card"
+import {TimezoneItemComponent} from "./timezone-item.component"
+import {Settings} from "luxon"
 
-describe('TimeZone Component',  () => {
-  let fixture: ComponentFixture<TimeZoneComponent>
-  let app: TimeZoneComponent
+describe('Timezone Component',  () => {
+  let fixture: ComponentFixture<TimezoneItemComponent>
+  let app: TimezoneItemComponent
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [TimeZoneComponent],
+      declarations: [TimezoneItemComponent],
     })
-    fixture = TestBed.createComponent(TimeZoneComponent);
+    fixture = TestBed.createComponent(TimezoneItemComponent);
     app = fixture.componentInstance;
 
     Settings.now = () => 1642882500000
   }))
 
   it('displays the timezone as title', () => {
-    const fakeTimeZoneName = 'America/New_York'
-    app.timezone = fakeTimeZoneName
+    const fakeTimezoneName = 'America/New_York'
+    app.timezone = fakeTimezoneName
     fixture.detectChanges()
 
     let titleElement = fixture.nativeElement.querySelector('.timezone-name')
-    expect(titleElement.textContent).toContain(fakeTimeZoneName)
+    expect(titleElement.textContent).toContain(fakeTimezoneName)
   })
 
   it('displays localtime in desired format as a subtitle', () => {
