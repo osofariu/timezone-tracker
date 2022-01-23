@@ -9,11 +9,13 @@ import {MatSelectModule} from "@angular/material/select";
 import {TimeZoneService} from "./timezone.service"
 import {HttpClientModule} from "@angular/common/http";
 import {MatListModule} from "@angular/material/list";
+import {TimezoneSelectorComponent} from "./timezone-selector/timezone-selector.component"
 
 @NgModule({
   declarations: [
     TimeZoneTrackerComponent,
-    TimeZoneComponent
+    TimeZoneComponent,
+    TimezoneSelectorComponent
   ],
   imports: [
     BrowserModule,

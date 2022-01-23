@@ -9,6 +9,7 @@ import {Component, Input} from "@angular/core"
 import {By} from "@angular/platform-browser"
 import {of} from "rxjs"
 import {MatListModule} from "@angular/material/list"
+import {TimezoneSelectorComponent} from "./timezone-selector/timezone-selector.component"
 
 @Component({
   selector: 'app-timezone',
@@ -18,10 +19,29 @@ class TimeZoneStub {
   @Input() public timezone?: string
 }
 
-
 describe('TimeZone Tracker', () => {
   let fixture: ComponentFixture<TimeZoneTrackerComponent>
   let app: TimeZoneTrackerComponent
+
+  function setupTestBed(timezoneServiceStub: any) {
+    TestBed.configureTestingModule({
+      imports: [
+        MatToolbarModule,
+        MatOptionModule,
+        MatSelectModule,
+        BrowserAnimationsModule,
+        MatListModule,
+      ],
+      declarations: [
+        TimeZoneTrackerComponent,
+        TimezoneSelectorComponent,
+        TimeZoneStub
+      ],
+      providers: [
+        {provide: TimeZoneService, useValue: timezoneServiceStub}
+      ]
+    }).compileComponents()
+  }
 
   describe('with successful timezone service', function () {
 
@@ -47,8 +67,18 @@ describe('TimeZone Tracker', () => {
       expect(fixture.nativeElement.querySelector('mat-toolbar')).toBeTruthy()
     })
 
-    it('has dropdown for timezones', () => {
-      expect(fixture.nativeElement.querySelector('mat-toolbar mat-select')).toBeTruthy()
+
+    it('if not timezone is selected, the timezone card should not be present', () => {
+      let timezoneComponent = fixture.debugElement.query(By.css('app-timezone'))?.componentInstance
+      expect(timezoneComponent).toBeFalsy()
+    })
+
+    it('selecting a timezone should add a new timezone item for that timezone', async () => {
+      await selectTimeZoneDropdown()
+      await selectTimeZoneItem(1)
+
+      let timezoneComponent = fixture.debugElement.query(By.css('app-timezone')).componentInstance
+      expect(timezoneComponent.timezone).toBe('CET')
     })
 
     it('uses TimeZoneService to show user a list of timezone areas', async () => {
@@ -60,26 +90,6 @@ describe('TimeZone Tracker', () => {
       expect(selectOptions[1].nativeElement.textContent).toContain('CET')
     })
 
-    it('when selecting a timezone from the list, component remembers the selected value', async () => {
-      await selectTimeZoneDropdown()
-      await selectTimeZoneItem(1)
-
-      expect(app.selectedLocation).toEqual('CET')
-    })
-
-    it('selecting a timezone should add a new timezone card for that timezone', async () => {
-      await selectTimeZoneDropdown()
-      await selectTimeZoneItem(1)
-
-      let timezoneComponent = fixture.debugElement.query(By.css('app-timezone')).componentInstance
-      expect(timezoneComponent.timezone).toBe('CET')
-    })
-
-    it('if not timezone is selected, the timezone card should not be present', () => {
-      let timezoneComponent = fixture.debugElement.query(By.css('app-timezone'))?.componentInstance
-      expect(timezoneComponent).toBeFalsy()
-    })
-
     async function selectTimeZoneDropdown() {
       const trigger = fixture.debugElement.query(By.css('.mat-select-trigger')).nativeElement
       trigger.click()
@@ -88,6 +98,7 @@ describe('TimeZone Tracker', () => {
     }
 
     async function selectTimeZoneItem(itemNumber: number) {
+
       const options = document.querySelectorAll('.mat-select-panel mat-option')
       const secondOption = options.item(itemNumber) as HTMLElement
       secondOption.click()
@@ -119,22 +130,5 @@ describe('TimeZone Tracker', () => {
     })
   })
 
-  function setupTestBed(timezoneServiceStub: any) {
-    TestBed.configureTestingModule({
-      imports: [
-        MatToolbarModule,
-        MatOptionModule,
-        MatSelectModule,
-        BrowserAnimationsModule,
-        MatListModule,
-      ],
-      declarations: [
-        TimeZoneTrackerComponent,
-        TimeZoneStub
-      ],
-      providers: [
-        {provide: TimeZoneService, useValue: timezoneServiceStub}
-      ]
-    }).compileComponents()
-  }
+
 })

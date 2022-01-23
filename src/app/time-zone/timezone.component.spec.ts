@@ -10,9 +10,6 @@ describe('TimeZone Component',  () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [TimeZoneComponent],
-      imports: [
-        MatCardModule
-      ]
     })
     fixture = TestBed.createComponent(TimeZoneComponent);
     app = fixture.componentInstance;

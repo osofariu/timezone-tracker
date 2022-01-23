@@ -1,13 +1,9 @@
 <mat-toolbar color="primary">
   <h1 data-testid="app-title">Time Zone Tracker</h1>
   <span class="spacer"></span>
-  <mat-form-field>
-    <mat-select  (selectionChange)="selectionChange($event.value)" [(value)]="selectedLocation" name="location">
-      <mat-option *ngFor="let location of timeZonesList" [value]="location">
-        {{location}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <timezone-selector [availableTimezones]="timeZonesList"
+                     (selectedTimezone)="onSelectedTimezone($event)">
+  </timezone-selector>
 </mat-toolbar>
 <mat-list>
   <app-timezone [timezone]="timeZoneName" *ngFor="let timeZoneName of selectedTimeZones"></app-timezone>

@@ -1,0 +1,7 @@
+<mat-form-field>
+  <mat-select  (selectionChange)="selectionChange($event.value)" [(value)]="selectedLocation">
+    <mat-option *ngFor="let location of availableTimezones" [value]="location">
+      {{location}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
