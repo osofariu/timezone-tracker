@@ -3,6 +3,7 @@ import {By} from "@angular/platform-browser"
 import {TimezoneSelectorComponent} from "./timezone-selector.component"
 import {MatSelectModule} from "@angular/material/select"
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations"
+import {selectTimezoneDropdown, selectTimezoneItem} from "./test-helpers"
 
 describe('Timezone Selector',  () => {
   let fixture: ComponentFixture<TimezoneSelectorComponent>
@@ -31,27 +32,11 @@ describe('Timezone Selector',  () => {
   })
 
   it('when selecting a timezone from the list, component remembers the selected value', async () => {
-    await selectTimezoneDropdown()
-    await selectTimezoneItem(1)
+    await selectTimezoneDropdown(fixture)
+    await selectTimezoneItem(fixture,1)
 
     expect(app.selectedLocation).toEqual('Europe/Bucharest')
   })
 
-  async function selectTimezoneDropdown() {
-    const trigger = fixture.debugElement.query(By.css('.mat-select-trigger')).nativeElement
-    trigger.click()
-    fixture.detectChanges()
-    await fixture.whenStable().then(() => {
-      const selectPanel =  fixture.debugElement.query(By.css('.mat-select-panel'))
-      expect(selectPanel).toBeTruthy()
-    });
-  }
 
-  async function selectTimezoneItem(itemNumber: number) {
-    const options = document.querySelectorAll('.mat-select-panel mat-option')
-    const secondOption = options.item(itemNumber) as HTMLElement
-    secondOption.click()
-    fixture.detectChanges()
-    await fixture.whenStable()
-  }
 })

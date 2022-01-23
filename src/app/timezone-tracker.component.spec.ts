@@ -10,6 +10,7 @@ import {By} from "@angular/platform-browser"
 import {of} from "rxjs"
 import {MatListModule} from "@angular/material/list"
 import {TimezoneSelectorComponent} from "./timezone-selector/timezone-selector.component"
+import {selectTimezoneDropdown, selectTimezoneItem} from "./timezone-selector/test-helpers"
 
 @Component({
   selector: 'app-timezone',
@@ -74,37 +75,21 @@ describe('Timezone Tracker', () => {
     })
 
     it('selecting a timezone should add a new timezone item for that timezone', async () => {
-      await selectTimezoneDropdown()
-      await selectTimezoneItem(1)
+      await selectTimezoneDropdown(fixture)
+      await selectTimezoneItem(fixture, 1)
 
       let timezoneComponent = fixture.debugElement.query(By.css('app-timezone')).componentInstance
       expect(timezoneComponent.timezone).toBe('CET')
     })
 
     it('uses TimezoneService to show user a list of timezone areas', async () => {
-      await selectTimezoneDropdown()
+      await selectTimezoneDropdown(fixture)
       const selectOptions = fixture.debugElement.queryAll(By.css('.mat-option-text'))
 
       expect(selectOptions.length).toEqual(2)
       expect(selectOptions[0].nativeElement.textContent).toContain('Australia/Sydney')
       expect(selectOptions[1].nativeElement.textContent).toContain('CET')
     })
-
-    async function selectTimezoneDropdown() {
-      const trigger = fixture.debugElement.query(By.css('.mat-select-trigger')).nativeElement
-      trigger.click()
-      fixture.detectChanges()
-      await fixture.whenStable()
-    }
-
-    async function selectTimezoneItem(itemNumber: number) {
-
-      const options = document.querySelectorAll('.mat-select-panel mat-option')
-      const secondOption = options.item(itemNumber) as HTMLElement
-      secondOption.click()
-      fixture.detectChanges()
-      await fixture.whenStable()
-    }
   })
 
   describe('with failed timezone service', function () {
