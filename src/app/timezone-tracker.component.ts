@@ -8,6 +8,7 @@ import {TimeZoneService} from "./timezone.service"
 })
 export class TimeZoneTrackerComponent implements OnInit{
   timeZonesList?: string[] = [];
+  error?: string
   selectedLocation?: string;
   selectedTimeZones: string[] = []
 
@@ -18,8 +19,12 @@ export class TimeZoneTrackerComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.timeZoneService.getLocations().subscribe(locations => {
-      this.timeZonesList = locations.results
+    this.timeZoneService.getLocations().subscribe(response => {
+      if (response.results) {
+        this.timeZonesList = response.results
+      } else {
+        this.error = response.error || 'Unknown error'
+      }
     })
   }
 }
