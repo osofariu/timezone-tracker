@@ -9,7 +9,6 @@ import {Component, Input} from "@angular/core"
 import {By} from "@angular/platform-browser"
 import {of} from "rxjs"
 import {MatListModule} from "@angular/material/list"
-import {MatCardModule} from "@angular/material/card"
 
 @Component({
   selector: 'app-timezone',
@@ -40,7 +39,8 @@ describe('TimeZone Tracker', () => {
 
     it('has title', () => {
       const compiled = fixture.nativeElement as HTMLElement
-      expect(compiled.querySelector('mat-toolbar [data-testid=app-title]')?.textContent).toContain('Time Zone Tracker')
+      expect(compiled.querySelector('mat-toolbar [data-testid=app-title]')?.textContent)
+        .toContain('Time Zone Tracker')
     })
 
     it('has toolbar', () => {
@@ -79,7 +79,6 @@ describe('TimeZone Tracker', () => {
       let timezoneComponent = fixture.debugElement.query(By.css('app-timezone'))?.componentInstance
       expect(timezoneComponent).toBeFalsy()
     })
-
 
     async function selectTimeZoneDropdown() {
       const trigger = fixture.debugElement.query(By.css('.mat-select-trigger')).nativeElement
