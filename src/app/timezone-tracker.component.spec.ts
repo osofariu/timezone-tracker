@@ -26,27 +26,10 @@ describe('TimeZone Tracker', () => {
 
   describe('with successful timezone service', function () {
 
-    let timezoneServiceStub = {
-      getLocations: () => of({results: ["Australia/Sydney", "CET"]})
-    }
-
     beforeEach(waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          MatToolbarModule,
-          MatOptionModule,
-          MatSelectModule,
-          BrowserAnimationsModule,
-          MatListModule,
-        ],
-        declarations: [
-          TimeZoneTrackerComponent,
-          TimeZoneStub
-        ],
-        providers: [
-          {provide: TimeZoneService, useValue: timezoneServiceStub}
-        ]
-      }).compileComponents()
+      setupTestBed({
+        getLocations: () => of({results: ["Australia/Sydney", "CET"]})
+      })
     }))
 
     beforeEach(() => {
@@ -115,27 +98,11 @@ describe('TimeZone Tracker', () => {
   })
 
   describe('with failed timezone service', function () {
-    let timezoneServiceStub = {
-      getLocations: () => of({error: "Failed to execute service"})
-    }
 
     beforeEach(waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          MatToolbarModule,
-          MatOptionModule,
-          MatSelectModule,
-          BrowserAnimationsModule,
-          MatListModule,
-        ],
-        declarations: [
-          TimeZoneTrackerComponent,
-          TimeZoneStub
-        ],
-        providers: [
-          {provide: TimeZoneService, useValue: timezoneServiceStub}
-        ]
-      }).compileComponents()
+      setupTestBed({
+        getLocations: () => of({error: "Failed to execute service"})
+      })
     }))
 
     beforeEach(() => {
@@ -152,4 +119,23 @@ describe('TimeZone Tracker', () => {
       })
     })
   })
+
+  function setupTestBed(timezoneServiceStub: any) {
+    TestBed.configureTestingModule({
+      imports: [
+        MatToolbarModule,
+        MatOptionModule,
+        MatSelectModule,
+        BrowserAnimationsModule,
+        MatListModule,
+      ],
+      declarations: [
+        TimeZoneTrackerComponent,
+        TimeZoneStub
+      ],
+      providers: [
+        {provide: TimeZoneService, useValue: timezoneServiceStub}
+      ]
+    }).compileComponents()
+  }
 })
