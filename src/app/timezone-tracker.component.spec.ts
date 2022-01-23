@@ -26,7 +26,7 @@ describe('TimeZone Tracker', () => {
   let timezoneServiceStub: Partial<TimeZoneService>
 
   timezoneServiceStub = {
-    getLocations: () => of(["Australia/Sydney", "CET"])
+    getLocations: () => of({results: ["Australia/Sydney", "CET"]})
   }
 
   beforeEach(waitForAsync(() => {

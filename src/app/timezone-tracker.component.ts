@@ -7,7 +7,7 @@ import {TimeZoneService} from "./timezone.service"
   styleUrls: ['timezone-tracker.component.scss']
 })
 export class TimeZoneTrackerComponent implements OnInit{
-  timeZonesList: string[] = [];
+  timeZonesList?: string[] = [];
   selectedLocation?: string;
   selectedTimeZones: string[] = []
 
@@ -19,7 +19,7 @@ export class TimeZoneTrackerComponent implements OnInit{
 
   ngOnInit(): void {
     this.timeZoneService.getLocations().subscribe(locations => {
-      this.timeZonesList = locations
+      this.timeZonesList = locations.results
     })
   }
 }

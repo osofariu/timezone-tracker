@@ -1,18 +1,26 @@
 import {Injectable} from "@angular/core"
 import {HttpClient} from "@angular/common/http"
 
-import {Observable} from 'rxjs'
+import {catchError, map, Observable, of} from 'rxjs'
 
 @Injectable({providedIn: 'root'})
 export class TimeZoneService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getLocations(): Observable<any> {
-    return this.httpClient.get('https://worldtimeapi.org/api/timezone');
+  getLocations(): Observable<TimeZoneNames> {
+    return this.httpClient.get('https://worldtimeapi.org/api/timezone')
+      .pipe(
+        map(response => ({results: response} as TimeZoneNames)),
+        catchError(error => of({error: error.statusText}))
+      )
   }
 }
 
+export type TimeZoneNames = {
+  results?: string[]
+  error?: string
+}
 // return of([
 //   {area: 'America', location: [{name: 'Anchorage'}, {name: 'Detroit'}, {name: 'Argentina', region: 'Buenos_Aires'}]},
 //   {area: 'Europe', location: [{name: 'Berlin'}, {name: 'Bucharest'}]},
