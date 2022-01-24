@@ -117,26 +117,54 @@ describe('Timezone Tracker', () => {
     });
   })
 
-  describe('with failed timezone service', function () {
+  describe('with failed TimezoneService', () => {
 
-    beforeEach(waitForAsync(() => {
-      setupTestBed({
-        getLocations: () => of({error: "Failed to execute service"})
+    describe('with specific error message', function () {
+
+      beforeEach(waitForAsync(() => {
+        setupTestBed({
+          getLocations: () => of({error: "Failed to execute service"})
+        })
+      }))
+
+      beforeEach(() => {
+        fixture = TestBed.createComponent(TimezoneTrackerComponent)
+        app = fixture.componentInstance
+        fixture.detectChanges()
       })
-    }))
 
-    beforeEach(() => {
-      fixture = TestBed.createComponent(TimezoneTrackerComponent)
-      app = fixture.componentInstance
-      fixture.detectChanges()
+      it('if timezone service returns an error, show that on the page', done => {
+        fixture.whenStable().then(() => {
+          let errorMessageElement = fixture.nativeElement.querySelector('.error-message')
+          expect(errorMessageElement.textContent).toEqual('Failed to execute service')
+          done()
+        })
+      })
     })
+    describe('with timeout error', function () {
 
-    it('if timezone service returns an error, show that on the page', done => {
-      fixture.whenStable().then(() => {
-        let dateTimeElement = fixture.nativeElement.querySelector('.error-message')
-        expect(dateTimeElement.textContent).toEqual('Failed to execute service')
-        done()
+      beforeEach(waitForAsync(() => {
+        setupTestBed({
+          getLocations: () => of({error: undefined})
+        })
+      }))
+
+      beforeEach(() => {
+        fixture = TestBed.createComponent(TimezoneTrackerComponent)
+        app = fixture.componentInstance
+        fixture.detectChanges()
+      })
+
+      it('if timezone service returns an error, show that on the page', done => {
+        fixture.whenStable().then(() => {
+          let errorMessageElement = fixture.nativeElement.querySelector('.error-message')
+          expect(errorMessageElement.textContent).toEqual('Failed to retrieve timezones')
+          done()
+        })
       })
     })
   })
+
+
+
 })

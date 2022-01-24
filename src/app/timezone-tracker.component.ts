@@ -21,7 +21,7 @@ export class TimezoneTrackerComponent implements OnInit, OnDestroy {
       if (response.results) {
         this.timezonesList = response.results
       } else {
-        this.error = response.error || 'Unknown error'
+        this.error = response.error || 'Failed to retrieve timezones'
       }
     })
     this.refreshTime$ = new Subject<boolean>()
@@ -36,7 +36,6 @@ export class TimezoneTrackerComponent implements OnInit, OnDestroy {
   }
 
   onRefreshButton() {
-    console.log('****************')
     this.refreshTime$?.next(true)
   }
 }
