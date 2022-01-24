@@ -1,7 +1,7 @@
 import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from "@angular/core/testing"
 import {TimezoneItemComponent} from "./timezone-item.component"
 import {DateTime, Settings} from "luxon"
-import {Subject} from "rxjs"
+import {Subject, Subscription} from "rxjs"
 
 describe('Timezone Item Component', () => {
   let fixture: ComponentFixture<TimezoneItemComponent>
@@ -58,5 +58,14 @@ describe('Timezone Item Component', () => {
     console.log(currentTime, latestTime)
     expect(currentTime).not.toEqual(latestTime)
   }))
+
+  it('unsubscribes when destroyed', () => {
+    app.refreshSubscription = new Subscription();
+    spyOn(app.refreshSubscription, 'unsubscribe');
+
+    app.ngOnDestroy();
+
+    expect(app.refreshSubscription.unsubscribe).toHaveBeenCalledTimes(1);
+  });
 })
 

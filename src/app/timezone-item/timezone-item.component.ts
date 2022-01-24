@@ -25,7 +25,6 @@ export class TimezoneItemComponent implements OnInit, OnDestroy {
     })
   }
 
-  // TODO test this
   ngOnDestroy(): void {
     this.refreshSubscription?.unsubscribe()
   }
