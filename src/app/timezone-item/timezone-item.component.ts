@@ -31,6 +31,7 @@ export class TimezoneItemComponent implements OnInit, OnDestroy {
 
   refreshTime() {
     const localTimeDate = DateTime.local().setZone(this.timezone)
-    this.localTime = localTimeDate.toLocaleString(DateTime.DATETIME_MED)
+    // this.localTime = localTimeDate.toLocaleString(DateTime.DATETIME_MED)
+    this.localTime = localTimeDate.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
   }
 }

@@ -1,4 +1,4 @@
-import {ComponentFixture, TestBed, waitForAsync} from "@angular/core/testing"
+import {ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick, waitForAsync} from "@angular/core/testing"
 import {TimezoneTrackerComponent} from "./timezone-tracker.component"
 import {MatToolbarModule} from "@angular/material/toolbar"
 import {TimezoneService} from "./timezone-service/timezone.service"
@@ -94,19 +94,6 @@ describe('Timezone Tracker', () => {
       expect(selectOptions[1].nativeElement.textContent).toContain('CET')
     })
 
-    it('when refresh button is pressed, the refresh subject get next value', done => {
-      let initialValue = false
-      app.refreshTime$?.subscribe(() => {
-        initialValue = true
-        done()
-      })
-
-      let button = fixture.debugElement.nativeElement.querySelector('button');
-      button.click();
-      fixture.detectChanges()
-      expect(initialValue).toBeTrue()
-    })
-
     it('unsubscribes when destroyed', () => {
       app.getLocationsSubscription = new Subscription();
       spyOn(app.getLocationsSubscription, 'unsubscribe');
@@ -115,6 +102,40 @@ describe('Timezone Tracker', () => {
 
       expect(app.getLocationsSubscription.unsubscribe).toHaveBeenCalledTimes(1);
     });
+
+    it('sets interval to refresh current time', fakeAsync(() => {
+      let refreshCount = 0
+
+      app.refreshTime$?.subscribe(() => {
+        refreshCount += 1
+      })
+
+      let button = fixture.debugElement.nativeElement.querySelector('button');
+      button.click();
+      fixture.detectChanges()
+      tick(1500)
+      expect(refreshCount).toEqual(1)
+      discardPeriodicTasks()
+    }))
+
+    it('stops interval for refresh current time', fakeAsync(() => {
+      let refreshCount = 0
+
+      let button = fixture.debugElement.nativeElement.querySelector('button');
+      button.click();
+      fixture.detectChanges()
+
+      app.refreshTime$?.subscribe(() => {
+        refreshCount += 1
+      })
+
+      button.click();
+      fixture.detectChanges()
+
+      tick(1500)
+      expect(refreshCount).toEqual(0)
+      discardPeriodicTasks()
+    }))
   })
 
   describe('with failed TimezoneService', () => {
