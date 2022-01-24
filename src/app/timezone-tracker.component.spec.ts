@@ -7,7 +7,7 @@ import {MatSelectModule} from "@angular/material/select"
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations"
 import {Component, Input} from "@angular/core"
 import {By} from "@angular/platform-browser"
-import {of} from "rxjs"
+import {of, Subscription} from "rxjs"
 import {MatListModule} from "@angular/material/list"
 import {TimezoneSelectorComponent} from "./timezone-selector/timezone-selector.component"
 import {selectTimezoneDropdown, selectTimezoneItem} from "./timezone-selector/test-helpers"
@@ -23,6 +23,7 @@ class TimezoneStub {
 describe('Timezone Tracker', () => {
   let fixture: ComponentFixture<TimezoneTrackerComponent>
   let app: TimezoneTrackerComponent
+  let getLocationsSubscription: Subscription
 
   function setupTestBed(timezoneServiceStub: any) {
     TestBed.configureTestingModule({
@@ -90,6 +91,15 @@ describe('Timezone Tracker', () => {
       expect(selectOptions[0].nativeElement.textContent).toContain('Australia/Sydney')
       expect(selectOptions[1].nativeElement.textContent).toContain('CET')
     })
+
+    it('unsubscribes when destroyed', () => {
+      app.getLocationsSubscription = new Subscription();
+      spyOn(app.getLocationsSubscription, 'unsubscribe');
+
+      app.ngOnDestroy();
+
+      expect(app.getLocationsSubscription.unsubscribe).toHaveBeenCalledTimes(1);
+    });
   })
 
   describe('with failed timezone service', function () {
