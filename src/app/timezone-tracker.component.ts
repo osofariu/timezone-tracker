@@ -1,5 +1,6 @@
 import {Component, OnDestroy, OnInit} from "@angular/core"
 import {TimezoneService} from "./timezone-service/timezone.service"
+import {Subject} from "rxjs"
 
 @Component({
   selector: 'app-timezone-tracker',
@@ -11,6 +12,7 @@ export class TimezoneTrackerComponent implements OnInit, OnDestroy {
   selectedTimezones: string[] = []
   error?: string
   getLocationsSubscription: any
+  refreshTime$?: Subject<boolean>
 
   constructor(private timezoneService: TimezoneService) { }
 
@@ -22,6 +24,7 @@ export class TimezoneTrackerComponent implements OnInit, OnDestroy {
         this.error = response.error || 'Unknown error'
       }
     })
+    this.refreshTime$ = new Subject<boolean>()
   }
 
   ngOnDestroy(): void {
@@ -30,5 +33,10 @@ export class TimezoneTrackerComponent implements OnInit, OnDestroy {
 
   onSelectedTimezone(timezone: string) {
     this.selectedTimezones?.push(timezone)
+  }
+
+  onRefreshButton() {
+    console.log('****************')
+    this.refreshTime$?.next(true)
   }
 }

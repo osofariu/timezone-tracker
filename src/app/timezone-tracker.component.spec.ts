@@ -7,10 +7,11 @@ import {MatSelectModule} from "@angular/material/select"
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations"
 import {Component, Input} from "@angular/core"
 import {By} from "@angular/platform-browser"
-import {of, Subscription} from "rxjs"
+import {of, Subject, Subscription} from "rxjs"
 import {MatListModule} from "@angular/material/list"
 import {TimezoneSelectorComponent} from "./timezone-selector/timezone-selector.component"
 import {selectTimezoneDropdown, selectTimezoneItem} from "./timezone-selector/test-helpers"
+import {MatButton} from "@angular/material/button"
 
 @Component({
   selector: 'app-timezone',
@@ -18,6 +19,7 @@ import {selectTimezoneDropdown, selectTimezoneItem} from "./timezone-selector/te
 })
 class TimezoneStub {
   @Input() public timezone?: string
+  @Input() refresh$?: Subject<boolean>
 }
 
 describe('Timezone Tracker', () => {
@@ -90,6 +92,19 @@ describe('Timezone Tracker', () => {
       expect(selectOptions.length).toEqual(2)
       expect(selectOptions[0].nativeElement.textContent).toContain('Australia/Sydney')
       expect(selectOptions[1].nativeElement.textContent).toContain('CET')
+    })
+
+    it('when refresh button is pressed, the refresh subject get next value', done => {
+      let initialValue = false
+      app.refreshTime$?.subscribe(() => {
+        initialValue = true
+        done()
+      })
+
+      let button = fixture.debugElement.nativeElement.querySelector('button');
+      button.click();
+      fixture.detectChanges()
+      expect(initialValue).toBeTrue()
     })
 
     it('unsubscribes when destroyed', () => {

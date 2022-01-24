@@ -1,22 +1,27 @@
-import {ComponentFixture, TestBed, waitForAsync} from "@angular/core/testing"
+import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from "@angular/core/testing"
 import {TimezoneItemComponent} from "./timezone-item.component"
-import {Settings} from "luxon"
+import {DateTime, Settings} from "luxon"
+import {Subject} from "rxjs"
 
-describe('Timezone Component',  () => {
+describe('Timezone Item Component', () => {
   let fixture: ComponentFixture<TimezoneItemComponent>
   let app: TimezoneItemComponent
+  let saveNow = Settings.now
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [TimezoneItemComponent],
     })
-    fixture = TestBed.createComponent(TimezoneItemComponent);
-    app = fixture.componentInstance;
-
-    Settings.now = () => 1642882500000
+    fixture = TestBed.createComponent(TimezoneItemComponent)
+    app = fixture.componentInstance
+    app.refresh$ = new Subject<boolean>()
   }))
 
-  it('displays the timezone as title', () => {
+  afterEach(() => {
+    Settings.now = saveNow
+  })
+
+  it('displays the timezone', () => {
     const fakeTimezoneName = 'America/New_York'
     app.timezone = fakeTimezoneName
     fixture.detectChanges()
@@ -25,10 +30,33 @@ describe('Timezone Component',  () => {
     expect(titleElement.textContent).toContain(fakeTimezoneName)
   })
 
-  it('displays localtime in desired format as a subtitle', () => {
+  it('displays localtime in desired format', () => {
+    Settings.now = () => 1642882500000
     app.timezone = 'America/New_York'
     fixture.detectChanges()
     let dateTimeElement = fixture.nativeElement.querySelector('.local-time')
-    expect(' 1/22/2022, 3:15 PM ').toContain(dateTimeElement.textContent)
+    expect(dateTimeElement.textContent).toEqual(' Jan 22, 2022, 3:15 PM ')
   })
+
+  it('refreshes localtime when the refresh$ subject gets s next value', fakeAsync(() => {
+    // set current time to one minutes ago
+    const oneSecondAgo = DateTime.local().minus({minutes: 1}).toMillis()
+    Settings.now = () => oneSecondAgo
+
+    app.timezone = 'America/New_York'
+    fixture.detectChanges()
+
+    let dateTimeElement = fixture.nativeElement.querySelector('.local-time')
+    let currentTime = dateTimeElement.textContent
+
+    Settings.now = saveNow
+    tick(1000)
+    app.refresh$?.next(true)
+    fixture.detectChanges()
+    let latestTime = dateTimeElement.textContent
+
+    console.log(currentTime, latestTime)
+    expect(currentTime).not.toEqual(latestTime)
+  }))
 })
+
