@@ -38,10 +38,10 @@ export class TimezoneItemComponent implements OnInit, OnDestroy {
    getTimeColor() {
     let currentHour = (this.localDateTime?.hour ?? 11) + 1
     if (currentHour >= 22 || currentHour <= 6) {
-      return "lightgray"
+      return "SlateGray"
     }
-    if (currentHour < 8) return "Gold"
-     if (currentHour > 18) return "DarkKhaki"
+    if (currentHour < 8) return "Aqua"
+     if (currentHour > 18) return "GoldenRod"
 
     return "LightGreen"
   }
