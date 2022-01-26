@@ -9,7 +9,9 @@ import {interval, Subject, Subscription, tap} from "rxjs"
 })
 export class TimezoneTrackerComponent implements OnInit, OnDestroy {
   timezonesList?: string[] = [];
-  selectedTimezones: string[] = []
+  selectedTimezones: string[] = ['America/New_York', 'Australia/Brisbane',
+    'Africa/Algiers', 'America/Phoenix', 'Asia/Kolkata', 'America/Los_Angeles',
+    'Pacific/Wake', 'Asia/Qatar']
   error?: string
   getLocationsSubscription: any
   refreshTime$?: Subject<boolean>

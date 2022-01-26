@@ -10,7 +10,8 @@ import {Observable, Subject, Subscription} from "rxjs"
 export class TimezoneItemComponent implements OnInit, OnDestroy {
   @Input() timezone?: string;
   @Input() refresh$?: Subject<boolean>
-  localTime: string = ''
+  localDateTime?: DateTime
+  localDateTimeStr: string = ''
   refreshSubscription?: Subscription
 
   ngOnInit(): void {
@@ -30,8 +31,19 @@ export class TimezoneItemComponent implements OnInit, OnDestroy {
   }
 
   refreshTime() {
-    const localTimeDate = DateTime.local().setZone(this.timezone)
-    // this.localTime = localTimeDate.toLocaleString(DateTime.DATETIME_MED)
-    this.localTime = localTimeDate.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+    this.localDateTime = DateTime.local().setZone(this.timezone)
+    this.localDateTimeStr = this.localDateTime.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
   }
+
+   getTimeColor() {
+    let currentHour = (this.localDateTime?.hour ?? 11) + 1
+    if (currentHour >= 22 || currentHour <= 6) {
+      return "lightgray"
+    }
+    if (currentHour < 8) return "Gold"
+     if (currentHour > 18) return "DarkKhaki"
+
+    return "LightGreen"
+  }
+
 }
