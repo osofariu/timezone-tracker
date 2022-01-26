@@ -1,8 +1,8 @@
-<div class="timezone-list">
+<div class="timezone-item" [style.background-color]="getTimeColor()">
   <div class="timezone-name">
     {{timezone}}
   </div>
   <div class="local-time">
-    {{localTime}}
+    {{localDateTimeStr}}
   </div>
 </div>

@@ -55,17 +55,68 @@ describe('Timezone Item Component', () => {
     fixture.detectChanges()
     let latestTime = dateTimeElement.textContent
 
-    console.log(currentTime, latestTime)
     expect(currentTime).not.toEqual(latestTime)
   }))
 
   it('unsubscribes when destroyed', () => {
-    app.refreshSubscription = new Subscription();
-    spyOn(app.refreshSubscription, 'unsubscribe');
+    app.refreshSubscription = new Subscription()
+    spyOn(app.refreshSubscription, 'unsubscribe')
 
-    app.ngOnDestroy();
+    app.ngOnDestroy()
 
-    expect(app.refreshSubscription.unsubscribe).toHaveBeenCalledTimes(1);
-  });
+    expect(app.refreshSubscription.unsubscribe).toHaveBeenCalledTimes(1)
+  })
+
+  describe('background color depending on the time of the day', () => {
+    const FEB_2_MIDNIGHT = 1643778000000
+    const HOUR_IN_MILLISECONDS = 60 * 60 * 1000
+    beforeEach(() => {
+      app.timezone = 'America/New_York'
+    })
+
+    it('nighttime starts - is slategray starting at 10PM', () => {
+      expectBackgroundColorAtTime('slategray', getUnixTimeForHour(22))
+    })
+
+    it('nighttime ends - is slategray right before 6AM', () => {
+      expectBackgroundColorAtTime('slategray', getUnixTimeForHour(6) - 1)
+    })
+
+    it('morning starts - is aqua starting at 6AM', () => {
+      expectBackgroundColorAtTime('aqua', getUnixTimeForHour(6))
+    })
+
+    it('morning ends - is aqua right before 8AM', () => {
+      expectBackgroundColorAtTime('aqua', getUnixTimeForHour(8) - 1)
+    })
+
+    it('daytime starts - LightGreen starting at 8AM', () => {
+      expectBackgroundColorAtTime('lightgreen', getUnixTimeForHour(8))
+    })
+
+    it('daytime ends - LightGreen until 6PM', () => {
+      expectBackgroundColorAtTime('lightgreen', getUnixTimeForHour(18))
+    })
+
+    it('evening starts - is GoldenRod starting right after 7pm', () => {
+      expectBackgroundColorAtTime('goldenrod', getUnixTimeForHour(18) + HOUR_IN_MILLISECONDS)
+    })
+
+    it('evening ends - is GoldenRod until right before 10pm', () => {
+      expectBackgroundColorAtTime('goldenrod', getUnixTimeForHour(22) - 1)
+    })
+
+    function getUnixTimeForHour(hour: number) {
+      return FEB_2_MIDNIGHT + (hour - 1)  * HOUR_IN_MILLISECONDS
+    }
+
+    function expectBackgroundColorAtTime(backgroundColor: string, unixTime: number) {
+      Settings.now = () => unixTime
+      fixture.detectChanges()
+
+      let timezoneItemElement = fixture.nativeElement.querySelector('.timezone-item')
+      expect(timezoneItemElement.style.backgroundColor).toEqual(backgroundColor)
+    }
+  })
 })
 

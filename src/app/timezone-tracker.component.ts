@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit} from "@angular/core"
+import {Component, OnDestroy, OnInit} from "@angular/core"
 import {TimezoneService} from "./timezone-service/timezone.service"
 import {interval, Subject, Subscription, tap} from "rxjs"
 
@@ -11,9 +11,11 @@ export class TimezoneTrackerComponent implements OnInit, OnDestroy {
   timezonesList?: string[] = [];
   selectedTimezones: string[] = []
   error?: string
-  getLocationsSubscription: any
+
+  getLocationsSubscription?: Subscription
+  refreshSubscription?: Subscription
+
   refreshTime$?: Subject<boolean>
-  s?: Subscription
   refreshAutomatically = false
 
   constructor(private timezoneService: TimezoneService) { }
@@ -30,8 +32,8 @@ export class TimezoneTrackerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.getLocationsSubscription.unsubscribe()
-    this.s?.unsubscribe()
+    this.getLocationsSubscription?.unsubscribe()
+    this.refreshSubscription?.unsubscribe()
   }
 
   onSelectedTimezone(timezone: string) {
@@ -41,19 +43,19 @@ export class TimezoneTrackerComponent implements OnInit, OnDestroy {
   onRefreshButton() {
     this.refreshAutomatically = !this.refreshAutomatically
     if (this.refreshAutomatically) {
-      this.s = this.doRefresh()
+      this.refreshSubscription = this.doRefresh()
     } else {
       this.dontRefresh()
     }
   }
 
   doRefresh() : Subscription {
-    return this.s = this.refreshTimePeriodically(1000)
+    return this.refreshSubscription = this.refreshTimePeriodically(1000)
       .subscribe(() => {})
   }
 
   dontRefresh() {
-    this.s?.unsubscribe()
+    this.refreshSubscription?.unsubscribe()
   }
 
   refreshTimePeriodically(period: number) {
