@@ -9,7 +9,7 @@ import {
 } from "@angular/core/testing"
 import {TimezoneTrackerComponent} from "./timezone-tracker.component"
 import {MatToolbarModule} from "@angular/material/toolbar"
-import {TimezoneService} from "./timezone-service/timezone.service"
+import {TimezoneService} from "../timezone-service/timezone.service"
 import {MatOptionModule} from "@angular/material/core"
 import {MatSelectModule} from "@angular/material/select"
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations"
@@ -17,8 +17,8 @@ import {Component, Input} from "@angular/core"
 import {By} from "@angular/platform-browser"
 import {of, Subject, Subscription} from "rxjs"
 import {MatListModule} from "@angular/material/list"
-import {TimezoneSelectorComponent} from "./timezone-selector/timezone-selector.component"
-import {selectTimezoneDropdown, selectTimezoneItem} from "./timezone-selector/test-helpers"
+import {TimezoneSelectorComponent} from "../timezone-selector/timezone-selector.component"
+import {selectTimezoneDropdown, selectTimezoneItem} from "../timezone-selector/test-helpers"
 
 @Component({
   selector: 'app-timezone',

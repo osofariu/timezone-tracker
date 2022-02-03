@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from "@angular/core"
-import {TimezoneService} from "./timezone-service/timezone.service"
+import {TimezoneService} from "../timezone-service/timezone.service"
 import {interval, Subject, Subscription, tap} from "rxjs"
 
 @Component({
