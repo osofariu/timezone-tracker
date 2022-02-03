@@ -5,7 +5,6 @@
                      (selectedTimezone)="onSelectedTimezone($event)">
   </timezone-selector>
 </mat-toolbar>
-<button class="refresh-time" mat-button color="accent" (click)="onRefreshButton()">Auto Refresh</button>
 <mat-list>
   <app-timezone [timezone]="timezoneName" [refresh$]="refreshTime$" *ngFor="let timezoneName of selectedTimezones"></app-timezone>
 </mat-list>

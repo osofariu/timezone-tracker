@@ -1,4 +1,12 @@
-import {ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick, waitForAsync} from "@angular/core/testing"
+import {
+  ComponentFixture,
+  discardPeriodicTasks,
+  fakeAsync,
+  flush,
+  TestBed,
+  tick,
+  waitForAsync
+} from "@angular/core/testing"
 import {TimezoneTrackerComponent} from "./timezone-tracker.component"
 import {MatToolbarModule} from "@angular/material/toolbar"
 import {TimezoneService} from "./timezone-service/timezone.service"
@@ -11,7 +19,6 @@ import {of, Subject, Subscription} from "rxjs"
 import {MatListModule} from "@angular/material/list"
 import {TimezoneSelectorComponent} from "./timezone-selector/timezone-selector.component"
 import {selectTimezoneDropdown, selectTimezoneItem} from "./timezone-selector/test-helpers"
-import {MatButton} from "@angular/material/button"
 
 @Component({
   selector: 'app-timezone',
@@ -25,7 +32,6 @@ class TimezoneStub {
 describe('Timezone Tracker', () => {
   let fixture: ComponentFixture<TimezoneTrackerComponent>
   let app: TimezoneTrackerComponent
-  let getLocationsSubscription: Subscription
 
   function setupTestBed(timezoneServiceStub: any) {
     TestBed.configureTestingModule({
@@ -77,65 +83,60 @@ describe('Timezone Tracker', () => {
       expect(timezoneComponent).toBeFalsy()
     })
 
-    it('selecting a timezone should add a new timezone item for that timezone', async () => {
-      await selectTimezoneDropdown(fixture)
-      await selectTimezoneItem(fixture, 1)
+    it('selecting a timezone should add a new timezone item for that timezone', fakeAsync(() => {
+      selectTimezoneDropdown(fixture)
+      selectTimezoneItem(fixture, 1)
 
       let timezoneComponent = fixture.debugElement.query(By.css('app-timezone')).componentInstance
       expect(timezoneComponent.timezone).toBe('CET')
-    })
 
-    it('uses TimezoneService to show user a list of timezone areas', async () => {
-      await selectTimezoneDropdown(fixture)
+      flush()
+    }))
+
+    it('uses TimezoneService to show user a list of timezone areas', fakeAsync(() => {
+      selectTimezoneDropdown(fixture)
       const selectOptions = fixture.debugElement.queryAll(By.css('.mat-option-text'))
 
       expect(selectOptions.length).toEqual(2)
       expect(selectOptions[0].nativeElement.textContent).toContain('Australia/Sydney')
       expect(selectOptions[1].nativeElement.textContent).toContain('CET')
-    })
 
-    it('unsubscribes when destroyed', () => {
-      app.getLocationsSubscription = new Subscription();
-      spyOn(app.getLocationsSubscription, 'unsubscribe');
+      flush()
+    }))
 
-      app.ngOnDestroy();
-
-      expect(app.getLocationsSubscription.unsubscribe).toHaveBeenCalledTimes(1);
-    });
-
-    it('sets interval to refresh current time', fakeAsync(() => {
+    it('sets interval to refresh current time onInit', fakeAsync(() => {
       let refreshCount = 0
+      app.ngOnInit()
 
       app.refreshTime$?.subscribe(() => {
         refreshCount += 1
       })
 
-      let button = fixture.debugElement.nativeElement.querySelector('button');
-      button.click();
-      fixture.detectChanges()
-      tick(1500)
+      tick(1000)
       expect(refreshCount).toEqual(1)
       discardPeriodicTasks()
     }))
 
-    it('stops interval for refresh current time', fakeAsync(() => {
+    it('stops interval for refresh current time onDestroy', fakeAsync(() => {
       let refreshCount = 0
-
-      let button = fixture.debugElement.nativeElement.querySelector('button');
-      button.click();
-      fixture.detectChanges()
 
       app.refreshTime$?.subscribe(() => {
         refreshCount += 1
       })
-
-      button.click();
-      fixture.detectChanges()
-
       tick(1500)
+
       expect(refreshCount).toEqual(0)
       discardPeriodicTasks()
     }))
+
+    it('unsubscribes when destroyed', () => {
+      app.getLocationsSubscription = new Subscription()
+      spyOn(app.getLocationsSubscription, 'unsubscribe')
+
+      app.ngOnDestroy()
+
+      expect(app.getLocationsSubscription.unsubscribe).toHaveBeenCalledTimes(1)
+    })
   })
 
   describe('with failed TimezoneService', () => {
@@ -154,14 +155,14 @@ describe('Timezone Tracker', () => {
         fixture.detectChanges()
       })
 
-      it('if timezone service returns an error, show that on the page', done => {
-        fixture.whenStable().then(() => {
-          let errorMessageElement = fixture.nativeElement.querySelector('.error-message')
-          expect(errorMessageElement.textContent).toEqual('Failed to execute service')
-          done()
-        })
-      })
+      it('if timezone service returns an error, show that on the page', fakeAsync(() => {
+        let errorMessageElement = fixture.nativeElement.querySelector('.error-message')
+        expect(errorMessageElement.textContent).toEqual('Failed to execute service')
+
+        flush()
+      }))
     })
+
     describe('with timeout error', function () {
 
       beforeEach(waitForAsync(() => {
@@ -173,19 +174,16 @@ describe('Timezone Tracker', () => {
       beforeEach(() => {
         fixture = TestBed.createComponent(TimezoneTrackerComponent)
         app = fixture.componentInstance
+        app.refreshSubscription?.unsubscribe()
         fixture.detectChanges()
       })
 
-      it('if timezone service returns an error, show that on the page', done => {
-        fixture.whenStable().then(() => {
-          let errorMessageElement = fixture.nativeElement.querySelector('.error-message')
-          expect(errorMessageElement.textContent).toEqual('Failed to retrieve timezones')
-          done()
-        })
-      })
+      it('if timezone service returns an error, show that on the page', fakeAsync(() => {
+        let errorMessageElement = fixture.nativeElement.querySelector('.error-message')
+        expect(errorMessageElement.textContent).toEqual('Failed to retrieve timezones')
+
+        flush()
+      }))
     })
   })
-
-
-
 })
