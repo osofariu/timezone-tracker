@@ -35,7 +35,7 @@ describe('Timezone Item Component', () => {
     app.timezone = 'America/New_York'
     fixture.detectChanges()
     let dateTimeElement = fixture.nativeElement.querySelector('.local-time')
-    expect(dateTimeElement.textContent).toEqual(' Jan 22, 2022, 3:15:00 PM ')
+    expect(dateTimeElement.textContent).toEqual(' Sat, Jan 22, 03:15 PM ')
   })
 
   it('refreshes localtime when the refresh$ subject gets s next value', fakeAsync(() => {

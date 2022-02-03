@@ -32,7 +32,8 @@ export class TimezoneItemComponent implements OnInit, OnDestroy {
 
   refreshTime() {
     this.localDateTime = DateTime.local().setZone(this.timezone)
-    this.localDateTimeStr = this.localDateTime.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+    this.localDateTimeStr = this.localDateTime
+      .toLocaleString({ weekday: 'short', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' });
   }
 
   getTimeColor() {
