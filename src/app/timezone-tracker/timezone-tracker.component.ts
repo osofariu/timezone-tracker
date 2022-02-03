@@ -8,7 +8,7 @@ import {interval, Subject, Subscription, tap} from "rxjs"
   styleUrls: ['timezone-tracker.component.scss']
 })
 export class TimezoneTrackerComponent implements OnInit, OnDestroy {
-  timezonesList?: string[] = [];
+  timezonesList: string[] = [];
   selectedTimezones: string[] = []
   error?: string
 
@@ -21,7 +21,6 @@ export class TimezoneTrackerComponent implements OnInit, OnDestroy {
   constructor(private timezoneService: TimezoneService) { }
 
   ngOnInit(): void {
-    console.log('***** INIT GOT CALLED ******')
     this.getLocationsSubscription = this.timezoneService.getLocations().subscribe(response => {
       if (response.results) {
         this.timezonesList = response.results
@@ -31,7 +30,7 @@ export class TimezoneTrackerComponent implements OnInit, OnDestroy {
     })
     this.refreshTime$ = new Subject<boolean>()
     this.refreshSubscription = this.refreshTimePeriodically(1000)
-      .subscribe(() => {console.log('*********** tick ***************')})
+      .subscribe(() => {})
   }
 
   ngOnDestroy(): void {

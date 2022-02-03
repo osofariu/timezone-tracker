@@ -1,7 +1,14 @@
 <mat-form-field>
-  <mat-select  (selectionChange)="selectionChange($event.value)" [(value)]="selectedLocation">
-    <mat-option *ngFor="let location of availableTimezones" [value]="location">
-      {{location}}
+  <mat-label>Select timezone</mat-label>
+  <input type="text"
+         placeholder="type location"
+         aria-label="String"
+         matInput
+         [formControl]="myControl"
+         [matAutocomplete]="auto">
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectionChange($event)">
+    <mat-option *ngFor="let timezone of filteredTimezones | async" [value]="timezone">
+      {{timezone}}
     </mat-option>
-  </mat-select>
+  </mat-autocomplete>
 </mat-form-field>

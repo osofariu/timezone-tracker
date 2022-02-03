@@ -11,6 +11,9 @@ import {HttpClientModule} from "@angular/common/http"
 import {MatListModule} from "@angular/material/list"
 import {TimezoneSelectorComponent} from "../timezone-selector/timezone-selector.component"
 import {MatButtonModule} from "@angular/material/button"
+import {MatAutocompleteModule} from "@angular/material/autocomplete"
+import {MatInputModule} from "@angular/material/input"
+import {ReactiveFormsModule} from "@angular/forms"
 
 @NgModule({
   declarations: [
@@ -26,6 +29,9 @@ import {MatButtonModule} from "@angular/material/button"
     HttpClientModule,
     MatListModule,
     MatButtonModule,
+    MatAutocompleteModule,
+    MatInputModule,
+    ReactiveFormsModule,
   ],
   providers: [TimezoneService],
   bootstrap: [TimezoneTrackerComponent]
