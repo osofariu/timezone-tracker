@@ -3,9 +3,12 @@ import {By} from "@angular/platform-browser"
 import {TimezoneSelectorComponent} from "./timezone-selector.component"
 import {MatSelectModule} from "@angular/material/select"
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations"
-import {selectTimezoneDropdown, selectTimezoneItem} from "./test-helpers"
+import {MatAutocompleteModule} from "@angular/material/autocomplete"
+import {MatInputModule} from "@angular/material/input"
+import {first} from "rxjs"
+import {ReactiveFormsModule} from "@angular/forms"
 
-describe('Timezone Selector',  () => {
+describe('Timezone Selector', () => {
   let fixture: ComponentFixture<TimezoneSelectorComponent>
   let app: TimezoneSelectorComponent
 
@@ -14,29 +17,77 @@ describe('Timezone Selector',  () => {
       declarations: [TimezoneSelectorComponent],
       imports: [
         MatSelectModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        MatAutocompleteModule,
+        MatInputModule,
+        ReactiveFormsModule,
       ]
     }).compileComponents()
   }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TimezoneSelectorComponent);
-    app = fixture.componentInstance;
+    fixture = TestBed.createComponent(TimezoneSelectorComponent)
+    app = fixture.componentInstance
     app.availableTimezones = ['America/New_York', 'Europe/Bucharest']
     fixture.detectChanges()
   })
 
-  it('has dropdown for timezones', () => {
-    const dropDown = fixture.debugElement.queryAll(By.css('mat-toolbar mat-select'))
-    expect(dropDown).toBeTruthy()
+  describe('autocomplete - user can see selection ', () => {
+
+    it('should emit "America/New_York" when user types A', async () => {
+      let selectedTimezone: string
+      app.selectedTimezone.pipe(first())
+        .subscribe((timezoneInput: string) => {
+          selectedTimezone = timezoneInput
+        })
+
+      await autoCompleteTimezoneItem(fixture, 'A', 0)
+
+      expect(selectedTimezone!).toEqual('America/New_York')
+    })
+
+    it('should emit "America/New_York" when user types Yor', async ()  => {
+      let selectedTimezone: string
+      app.selectedTimezone.pipe(first())
+        .subscribe((timezoneInput: string) => {
+          selectedTimezone = timezoneInput
+        })
+
+      await autoCompleteTimezoneItem(fixture, 'Yor', 0)
+
+      fixture.detectChanges()
+      expect(selectedTimezone!).toEqual('America/New_York')
+    })
+
+    it('should emit "Europe/Bucharest" when user types Buc', async () => {
+      let selectedTimezone: string
+      app.selectedTimezone.pipe(first())
+        .subscribe((timezoneInput: string) => {
+          selectedTimezone = timezoneInput
+        })
+
+      await autoCompleteTimezoneItem(fixture, 'Buc', 0)
+
+      expect(selectedTimezone!).toEqual('Europe/Bucharest')
+    })
+
+    async function autoCompleteTimezoneItem(fixture: any, itemText: string, itemNumber: number) {
+      fixture.detectChanges();
+      const timezoneInputElement = fixture.debugElement.query(By.css('input')).nativeElement // Returns DebugElement
+
+      timezoneInputElement.dispatchEvent(new Event('focusin'))
+      timezoneInputElement.value = itemText
+      timezoneInputElement.dispatchEvent(new Event('input'))
+
+      fixture.detectChanges()
+      await fixture.whenStable()
+      fixture.detectChanges()
+      const matOptions = document.querySelectorAll('mat-option')
+      expect(matOptions).toBeTruthy()
+
+      const specificOption = matOptions[itemNumber] as HTMLElement
+      specificOption.click()
+      fixture.detectChanges()
+    }
   })
-
-  it('when selecting a timezone from the list, component remembers the selected value', async () => {
-    await selectTimezoneDropdown(fixture)
-    await selectTimezoneItem(fixture,1)
-
-    expect(app.selectedLocation).toEqual('Europe/Bucharest')
-  })
-
-
 })

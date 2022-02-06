@@ -37,7 +37,7 @@ export class TimezoneItemComponent implements OnInit, OnDestroy {
   }
 
   getTimeColor() {
-    let currentHour = (this.localDateTime?.hour ?? 12) + 1
+    let currentHour = (this.localDateTime?.hour ?? 12)
     if (currentHour >= 22 || currentHour < 6) {
       return "SlateGray"
     }

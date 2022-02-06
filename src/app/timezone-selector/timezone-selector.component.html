@@ -5,7 +5,8 @@
          aria-label="String"
          matInput
          [formControl]="myControl"
-         [matAutocomplete]="auto">
+         [matAutocomplete]="auto"
+         data-testid = "timezone-input">
   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectionChange($event)">
     <mat-option *ngFor="let timezone of filteredTimezones | async" [value]="timezone">
       {{timezone}}

@@ -13,21 +13,14 @@ import {TimezoneService} from "../timezone-service/timezone.service"
 import {MatOptionModule} from "@angular/material/core"
 import {MatSelectModule} from "@angular/material/select"
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations"
-import {Component, Input} from "@angular/core"
 import {By} from "@angular/platform-browser"
-import {of, Subject, Subscription} from "rxjs"
+import {of, Subscription} from "rxjs"
 import {MatListModule} from "@angular/material/list"
+import {MatAutocompleteModule} from "@angular/material/autocomplete"
+import {MatInputModule} from "@angular/material/input"
 import {TimezoneSelectorComponent} from "../timezone-selector/timezone-selector.component"
-import {selectTimezoneDropdown, selectTimezoneItem} from "../timezone-selector/test-helpers"
-
-@Component({
-  selector: 'app-timezone',
-  template: ''
-})
-class TimezoneStub {
-  @Input() public timezone?: string
-  @Input() refresh$?: Subject<boolean>
-}
+import {MockComponent} from "ng-mocks"
+import {TimezoneItemComponent} from "../timezone-item/timezone-item.component"
 
 describe('Timezone Tracker', () => {
   let fixture: ComponentFixture<TimezoneTrackerComponent>
@@ -41,11 +34,13 @@ describe('Timezone Tracker', () => {
         MatSelectModule,
         BrowserAnimationsModule,
         MatListModule,
+        MatAutocompleteModule,
+        MatInputModule
       ],
       declarations: [
         TimezoneTrackerComponent,
-        TimezoneSelectorComponent,
-        TimezoneStub
+        MockComponent(TimezoneSelectorComponent),
+        MockComponent(TimezoneItemComponent)
       ],
       providers: [
         {provide: TimezoneService, useValue: timezoneServiceStub}
@@ -54,10 +49,10 @@ describe('Timezone Tracker', () => {
   }
 
   describe('with successful timezone service', function () {
-
+    const expectedTimezones = ["Australia/Sydney", "CET"]
     beforeEach(waitForAsync(() => {
       setupTestBed({
-        getLocations: () => of({results: ["Australia/Sydney", "CET"]})
+        getLocations: () => of({results: expectedTimezones})
       })
     }))
 
@@ -77,32 +72,45 @@ describe('Timezone Tracker', () => {
       expect(fixture.nativeElement.querySelector('mat-toolbar')).toBeTruthy()
     })
 
-
-    it('if not timezone is selected, the timezone card should not be present', () => {
+    it('if no timezone is selected, the timezone card should not be present', () => {
       let timezoneComponent = fixture.debugElement.query(By.css('app-timezone'))?.componentInstance
       expect(timezoneComponent).toBeFalsy()
     })
 
-    it('selecting a timezone should add a new timezone item for that timezone', fakeAsync(() => {
-      selectTimezoneDropdown(fixture)
-      selectTimezoneItem(fixture, 1)
+    it('if timezones are selected, the timezone item components get rendered for those timezones', () => {
+      app.selectedTimezones = ['AAA/BBB', 'CCC/DDD']
+      fixture.detectChanges()
 
-      let timezoneComponent = fixture.debugElement.query(By.css('app-timezone')).componentInstance
-      expect(timezoneComponent.timezone).toBe('CET')
+      let timezoneItemComponents = fixture.debugElement.queryAll(By.css('app-timezone'))
+      expect(timezoneItemComponents.length).toBe(2)
+      expect(timezoneItemComponents[0].componentInstance.timezone).toEqual('AAA/BBB')
+      expect(timezoneItemComponents[1].componentInstance.timezone).toEqual('CCC/DDD')
+    })
 
-      flush()
+    it('selecting a timezone through TimezoneSelectorComponent should call onSelectedTimezone', fakeAsync(() => {
+      const emitTimezoneSpy = spyOn(app, 'onSelectedTimezone')
+
+      const timezoneSelector = fixture.debugElement.query(By.directive(TimezoneSelectorComponent)).componentInstance
+      timezoneSelector.selectedTimezone?.emit('AA/BB')
+      fixture.detectChanges()
+
+      expect(emitTimezoneSpy).toHaveBeenCalledOnceWith('AA/BB')
     }))
 
-    it('uses TimezoneService to show user a list of timezone areas', fakeAsync(() => {
-      selectTimezoneDropdown(fixture)
-      const selectOptions = fixture.debugElement.queryAll(By.css('.mat-option-text'))
+    it('selecting a timezone through TimezoneSelectorComponent should add a new timezone item for that timezone', fakeAsync(() => {
+      const timezoneSelector = fixture.debugElement.query(By.directive(TimezoneSelectorComponent)).componentInstance
+      timezoneSelector.selectedTimezone?.emit('AA/BB')
+      fixture.detectChanges()
 
-      expect(selectOptions.length).toEqual(2)
-      expect(selectOptions[0].nativeElement.textContent).toContain('Australia/Sydney')
-      expect(selectOptions[1].nativeElement.textContent).toContain('CET')
-
-      flush()
+      expect(app.selectedTimezones).toContain('AA/BB')
     }))
+
+    it('passes the available timezones to TimezoneSelectorComponent', () => {
+      const timezoneSelector = fixture.debugElement.query(By.directive(TimezoneSelectorComponent)).componentInstance
+      fixture.detectChanges()
+
+      expect(timezoneSelector.availableTimezones).toEqual(expectedTimezones)
+    })
 
     it('sets interval to refresh current time onInit', fakeAsync(() => {
       let refreshCount = 0

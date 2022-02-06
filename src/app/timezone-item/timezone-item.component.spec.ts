@@ -107,7 +107,7 @@ describe('Timezone Item Component', () => {
     })
 
     function getUnixTimeForHour(hour: number) {
-      return FEB_2_MIDNIGHT + (hour - 1)  * HOUR_IN_MILLISECONDS
+      return FEB_2_MIDNIGHT + hour * HOUR_IN_MILLISECONDS
     }
 
     function expectBackgroundColorAtTime(backgroundColor: string, unixTime: number) {

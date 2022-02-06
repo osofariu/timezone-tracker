@@ -10,12 +10,10 @@ import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete"
 export class TimezoneSelectorComponent implements OnInit {
   @Input() availableTimezones: string[] = []
   @Output() selectedTimezone = new EventEmitter<string>();
-  selectedLocation?: string
   myControl = new FormControl();
   filteredTimezones?: Observable<string[]>;
 
   selectionChange(timezoneSelected: MatAutocompleteSelectedEvent) {
-    console.log(timezoneSelected.option.value)
     this.selectedTimezone.emit(timezoneSelected.option.value)
   }
 
