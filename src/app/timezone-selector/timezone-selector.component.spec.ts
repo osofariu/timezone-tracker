@@ -34,6 +34,17 @@ describe('Timezone Selector', () => {
 
   describe('autocomplete - user can see selection ', () => {
 
+    it('should see the entire list when user clicks on it', async () => {
+      fixture.detectChanges();
+      const timezoneInputElement =  fixture.debugElement.query(By.css('input[data-testid="timezone-input"]')).nativeElement
+      timezoneInputElement.dispatchEvent(new Event('focusin'))
+      timezoneInputElement.dispatchEvent(new Event('click'))
+      fixture.detectChanges()
+
+      const matOptions = document.querySelectorAll('mat-option')
+      expect(matOptions.length).toEqual(2)
+    })
+
     it('should emit "America/New_York" when user types A', async () => {
       let selectedTimezone: string
       app.selectedTimezone.pipe(first())
@@ -82,6 +93,7 @@ describe('Timezone Selector', () => {
       fixture.detectChanges()
       await fixture.whenStable()
       fixture.detectChanges()
+
       const matOptions = document.querySelectorAll('mat-option')
       expect(matOptions).toBeTruthy()
 

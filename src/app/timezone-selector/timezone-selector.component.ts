@@ -18,13 +18,15 @@ export class TimezoneSelectorComponent implements OnInit {
   }
 
   private _filter(value: string): string[]  {
-    const filterValue = value.toLowerCase();
-    return this.availableTimezones.filter(option => option.toLowerCase().includes(filterValue));
+    if (value == null) {
+      return this.availableTimezones
+    }
+    return this.availableTimezones
+      .filter(option => option.toLowerCase().includes(value.toLocaleLowerCase()));
   }
 
   ngOnInit(): void {
     this.filteredTimezones = this.myControl.valueChanges.pipe(
-      startWith(''),
       map(value => this._filter(value)),
     );
   }
