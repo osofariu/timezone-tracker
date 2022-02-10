@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from "@angular/core"
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from "@angular/core"
 import {DateTime} from 'luxon'
 import {Subject, Subscription} from "rxjs"
 
@@ -10,6 +10,8 @@ import {Subject, Subscription} from "rxjs"
 export class TimezoneItemComponent implements OnInit, OnDestroy {
   @Input() timezone?: string
   @Input() refresh$?: Subject<boolean>
+  @Output() remove$: EventEmitter<string> = new EventEmitter<string>()
+
   localDateTime?: DateTime
   localDateTimeStr: string = ''
   refreshSubscription?: Subscription
@@ -28,6 +30,11 @@ export class TimezoneItemComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.refreshSubscription?.unsubscribe()
+  }
+
+  removeTimezone() {
+    console.log('*** remove timezone ')
+    this.remove$?.emit(this.timezone)
   }
 
   refreshTime() {

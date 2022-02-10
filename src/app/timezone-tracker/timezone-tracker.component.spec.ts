@@ -105,6 +105,18 @@ describe('Timezone Tracker', () => {
       expect(app.selectedTimezones).toContain('AA/BB')
     }))
 
+    it('selecting a timezone through TimezoneSelectorComponent and removing it should make it disappear from the list', fakeAsync(() => {
+      let aTimezone = 'AA/BB'
+      app.selectedTimezones = [ aTimezone ]
+      fixture.detectChanges()
+
+      const timezoneItemAdded = fixture.debugElement.query(By.directive(TimezoneItemComponent)).componentInstance
+      timezoneItemAdded.remove$.emit(aTimezone)
+      fixture.detectChanges()
+
+      expect(app.selectedTimezones).not.toContain(aTimezone)
+    }))
+
     it('passes the available timezones to TimezoneSelectorComponent', () => {
       const timezoneSelector = fixture.debugElement.query(By.directive(TimezoneSelectorComponent)).componentInstance
       fixture.detectChanges()

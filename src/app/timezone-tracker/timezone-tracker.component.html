@@ -6,7 +6,10 @@
   </timezone-selector>
 </mat-toolbar>
 <mat-list>
-  <app-timezone [timezone]="timezoneName" [refresh$]="refreshTime$" *ngFor="let timezoneName of selectedTimezones"></app-timezone>
+  <app-timezone [timezone]="timezoneName"
+                [refresh$]="refreshTime$"
+                (remove$) = "removeTimezone(timezoneName)"
+                *ngFor="let timezoneName of selectedTimezones"></app-timezone>
 </mat-list>
 
 <div class="error-message">{{error}}</div>

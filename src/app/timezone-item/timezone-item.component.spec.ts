@@ -1,7 +1,8 @@
 import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from "@angular/core/testing"
 import {TimezoneItemComponent} from "./timezone-item.component"
 import {DateTime, Settings} from "luxon"
-import {Subject, Subscription} from "rxjs"
+import {first, Subject, Subscription} from "rxjs"
+import {MatButtonModule} from "@angular/material/button"
 
 describe('Timezone Item Component', () => {
   let fixture: ComponentFixture<TimezoneItemComponent>
@@ -11,6 +12,9 @@ describe('Timezone Item Component', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [TimezoneItemComponent],
+      imports: [
+        MatButtonModule
+      ]
     })
     fixture = TestBed.createComponent(TimezoneItemComponent)
     app = fixture.componentInstance
@@ -36,6 +40,19 @@ describe('Timezone Item Component', () => {
     fixture.detectChanges()
     let dateTimeElement = fixture.nativeElement.querySelector('.local-time')
     expect(dateTimeElement.textContent).toEqual(' Sat, Jan 22, 03:15 PM ')
+  })
+
+  it('displays a button to remove timezone from the list', () => {
+    app.timezone = 'America/New_York'
+
+    let removed = ''
+    app.remove$?.pipe(first()).subscribe((timezone: string) => removed = timezone);
+
+    const removeButton = fixture.nativeElement.querySelector('.close-button')
+    removeButton.click()
+    fixture.detectChanges()
+
+   expect(removed).toEqual('America/New_York')
   })
 
   it('refreshes localtime when the refresh$ subject gets s next value', fakeAsync(() => {

@@ -16,7 +16,6 @@ export class TimezoneTrackerComponent implements OnInit, OnDestroy {
   refreshSubscription?: Subscription
 
   refreshTime$?: Subject<boolean>
-  refreshAutomatically = false
 
   constructor(private timezoneService: TimezoneService) { }
 
@@ -47,5 +46,9 @@ export class TimezoneTrackerComponent implements OnInit, OnDestroy {
       tap(() => {
         this.refreshTime$?.next(true)
       }))
+  }
+
+  removeTimezone(timezoneName: string) {
+    this.selectedTimezones = this.selectedTimezones.filter(timezone => timezone != timezoneName)
   }
 }

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core"
 import {FormControl} from "@angular/forms"
-import {map, Observable, startWith} from "rxjs"
+import {map, Observable} from "rxjs"
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete"
 
 @Component({
