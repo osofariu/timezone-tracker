@@ -15,6 +15,7 @@ export class TimezoneSelectorComponent implements OnInit {
 
   selectionChange(timezoneSelected: MatAutocompleteSelectedEvent) {
     this.selectedTimezone.emit(timezoneSelected.option.value)
+    this.myControl.setValue('')
   }
 
   private _filter(value: string): string[]  {

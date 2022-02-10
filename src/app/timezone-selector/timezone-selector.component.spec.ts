@@ -57,6 +57,13 @@ describe('Timezone Selector', () => {
       expect(selectedTimezone!).toEqual('America/New_York')
     })
 
+    it('after emitting a selectedTimezone, reset the current value', async () => {
+      await autoCompleteTimezoneItem(fixture, 'Buc', 0)
+
+      const timezoneInputElement =  fixture.debugElement.query(By.css('input[data-testid="timezone-input"]')).nativeElement
+      expect(timezoneInputElement.value).toEqual('')
+    })
+
     it('should emit "America/New_York" when user types Yor', async ()  => {
       let selectedTimezone: string
       app.selectedTimezone.pipe(first())
