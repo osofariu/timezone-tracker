@@ -1,0 +1,10 @@
+* Time Zone Tracker
+
+** TODO
+- [ ] auto-select first item in the list on timezone-selector, so the user can just press enter
+- [ ] add four icons to timezones for morning/workday/evening/night, and use hover to explain it
+- [ ] show time is being refreshed automatically - ideally an analog clock with at least second indicator
+  - if a complete clock, make it show local time
+- [ ] publish website to Azure / AWS
+
+
